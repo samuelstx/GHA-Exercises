@@ -22,7 +22,10 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-      - uses: actions/update-artifact@v4
+      - uses: actions/upload-artifact@v4
+        with: 
+          name: Upload Artifact
+          path: ./openapi_server
       - uses: actions/setup-java@v3
         with:
           java-version: "17"
