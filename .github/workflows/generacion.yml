@@ -22,10 +22,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-      - uses: actions/upload-artifact@v4
-        with: 
-          name: Upload Artifact
-          path: ./openapi_server
+      
       - uses: actions/setup-java@v3
         with:
           java-version: "17"
@@ -33,7 +30,12 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a java command 
-        run: java -jar openapi-generator-cli.jar generate -i usuarios.yaml -g python-flask -o ./openapi_server
+        run: java -jar openapi-generator-cli.jar generate -i Estadisticas.yaml -g python-flask -o ./openapi_server
 
       - name: Run a zip command
         run: zip -r openapi_server.zip openapi_server
+      
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Upload Artifact
+          path: ./openapi_server

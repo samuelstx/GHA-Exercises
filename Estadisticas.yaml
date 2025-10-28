@@ -1,0 +1,409 @@
+openapi: 3.0.3
+info:
+  title: API de Interacción y Personalización
+  description: API para gestionar la interacción y personalización de usuarios en la arquitectura de microservicios.
+  version: 1.0.0
+servers:
+  - url: https://api.tu-dominio.com/v1
+    description: Servidor principal
+
+tags:
+  - name: Historial
+    description: Operaciones relacionadas con el historial de visualizaciones
+  - name: Ratings
+    description: Operaciones relacionadas con los ratings de contenidos
+  - name: Favoritos
+    description: Operaciones relacionadas con los favoritos de los usuarios
+  - name: Recomendaciones
+    description: Operaciones para generar recomendaciones de contenido
+
+paths:
+  /historial:
+    get:
+      tags:
+        - Historial
+      summary: Obtener todas las visualizaciones
+      responses:
+        '200':
+          description: Lista de visualizaciones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Visualizacion'
+    post:
+      tags:
+        - Historial
+      summary: Agregar una visualización
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Visualizacion'
+      responses:
+        '201':
+          description: Visualización creada
+        '400':
+          description: Datos inválidos
+
+  /historial/{id_visualizacion}:
+    get:
+      tags:
+        - Historial
+      summary: Obtener visualización por ID
+      parameters:
+        - in: path
+          name: id_visualizacion
+          schema:
+            type: integer
+          required: true
+          description: ID de la visualización
+      responses:
+        '200':
+          description: Visualización encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Visualizacion'
+        '404':
+          description: Visualización no encontrada
+    put:
+      tags:
+        - Historial
+      summary: Actualizar visualización
+      parameters:
+        - in: path
+          name: id_visualizacion
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Visualizacion'
+      responses:
+        '200':
+          description: Visualización actualizada
+        '400':
+          description: Datos inválidos
+        '404':
+          description: Visualización no encontrada
+    delete:
+      tags:
+        - Historial
+      summary: Eliminar visualización
+      parameters:
+        - in: path
+          name: id_visualizacion
+          schema:
+            type: integer
+          required: true
+      responses:
+        '204':
+          description: Visualización eliminada
+        '404':
+          description: Visualización no encontrada
+
+  /historial/perfil/{id_perfil}:
+    get:
+      tags:
+        - Historial
+      summary: Obtener historial por perfil
+      parameters:
+        - in: path
+          name: id_perfil
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Lista de visualizaciones del perfil
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Visualizacion'
+        '404':
+          description: No se encontraron visualizaciones
+    delete:
+      tags:
+        - Historial
+      summary: Eliminar historial completo de un perfil
+      parameters:
+        - in: path
+          name: id_perfil
+          schema:
+            type: integer
+          required: true
+      responses:
+        '204':
+          description: Historial eliminado
+        '404':
+          description: Perfil no encontrado
+
+  /ratings:
+    post:
+      tags:
+        - Ratings
+      summary: Crear un rating
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rating'
+      responses:
+        '201':
+          description: Rating creado
+        '400':
+          description: Datos inválidos
+
+  /ratings/{id_rating}:
+    get:
+      tags:
+        - Ratings
+      summary: Obtener rating por ID
+      parameters:
+        - in: path
+          name: id_rating
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Rating encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rating'
+        '404':
+          description: Rating no encontrado
+    put:
+      tags:
+        - Ratings
+      summary: Actualizar rating
+      parameters:
+        - in: path
+          name: id_rating
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rating'
+      responses:
+        '200':
+          description: Rating actualizado
+        '400':
+          description: Datos inválidos
+        '404':
+          description: Rating no encontrado
+    delete:
+      tags:
+        - Ratings
+      summary: Eliminar rating
+      parameters:
+        - in: path
+          name: id_rating
+          schema:
+            type: integer
+          required: true
+      responses:
+        '204':
+          description: Rating eliminado
+        '404':
+          description: Rating no encontrado
+
+  /ratings/content/{id_contenido}:
+    get:
+      tags:
+        - Ratings
+      summary: Obtener ratings por contenido
+      parameters:
+        - in: path
+          name: id_contenido
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Lista de ratings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Rating'
+        '404':
+          description: No se encontraron ratings
+
+  /favoritos:
+    get:
+      tags:
+        - Favoritos
+      summary: Obtener favoritos
+      parameters:
+        - in: query
+          name: id_perfil
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Lista de favoritos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Favorito'
+    post:
+      tags:
+        - Favoritos
+      summary: Agregar a favoritos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Favorito'
+      responses:
+        '201':
+          description: Favorito agregado
+        '400':
+          description: Datos inválidos
+
+  /favoritos/{id_favorito}:
+    delete:
+      tags:
+        - Favoritos
+      summary: Eliminar favorito
+      parameters:
+        - in: path
+          name: id_favorito
+          schema:
+            type: integer
+          required: true
+      responses:
+        '204':
+          description: Favorito eliminado
+        '404':
+          description: Favorito no encontrado
+
+  /recomendaciones:
+    get:
+      tags:
+        - Recomendaciones
+      summary: Obtener recomendaciones generales
+      responses:
+        '200':
+          description: Lista de recomendaciones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contenido'
+
+  /recomendaciones/{id_usuario}:
+    get:
+      tags:
+        - Recomendaciones
+      summary: Obtener recomendaciones personalizadas
+      parameters:
+        - in: path
+          name: id_usuario
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Lista de recomendaciones personalizadas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contenido'
+        '400':
+          description: Parámetros inválidos
+
+components:
+  schemas:
+    Visualizacion:
+      type: object
+      properties:
+        id_visualizacion:
+          type: integer
+        id_perfil:
+          type: integer
+        id_contenido:
+          type: integer
+        fecha_visualizacion:
+          type: string
+          format: date-time
+        progreso:
+          type: number
+          format: float
+
+    Rating:
+      type: object
+      properties:
+        id_rating:
+          type: integer
+        id_contenido:
+          type: integer
+        id_perfil:
+          type: integer
+        thumb_up:
+          type: boolean
+
+    Favorito:
+      type: object
+      properties:
+        id_favorito:
+          type: integer
+        id_perfil:
+          type: integer
+        id_contenido:
+          type: integer
+        fecha_agregado:
+          type: string
+          format: date-time
+
+    Contenido:
+      type: object
+      properties:
+        id_contenido:
+          type: integer
+        titulo:
+          type: string
+        descripcion:
+          type: string
+        tipo:
+          type: string
+          enum:
+            - pelicula
+            - serie
+        fecha_lanzamiento:
+          type: string
+          format: date
+        duracion:
+          type: integer
+        trailer_url:
+          type: string
+          format: uri
+        portada_url:
+          type: string
+          format: uri
+        stream_url:
+          type: string
+          format: uri
