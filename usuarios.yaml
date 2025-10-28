@@ -1,0 +1,385 @@
+openapi: 3.0.0
+info:
+  title: API de Sistema de Música en Streaming - Usuarios
+  description: API para gestionar usuario, usuario suscrito, artista de un sistema de música en streaming.
+  version: 1.0.0
+tags:
+  - name: Usuario
+    description: Todas las operaciones relacionadas con los usuario
+  - name: Usuario suscrito
+    description: Todas las operaciones relacionadas con los usuario suscrito
+  - name: Artista
+    description: Todas las operaciones relacionadas con los artista
+
+
+
+paths:
+  /usuarios:
+    get:
+      tags:
+      - Usuario
+      summary: Obtener todos los usuarios
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Usuario'
+    
+    post:
+      tags:
+      - Usuario
+      summary: Crear un nuevo usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+      responses:
+        '201':
+          description: Usuario creado correctamente
+          
+  /usuarios/{id}:
+    get: 
+      tags:
+      - Usuario
+      summary: Obtener un usuario por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario que se desea obtener
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '404':
+          description: Usuario no encontrado
+          
+    put:
+      tags:
+      - Usuario
+      summary: Actualizar un usuario por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario que se desea actualizar
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+      responses:
+        '204':
+          description: Usuario actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '404':
+          description: Usuario no encontrado
+    delete:
+      tags:
+      - Usuario
+      summary: Borrar un usuario por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario que se desea borrar
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Usuario borrado correctamente
+        '404':
+          description: Usuario no encontrado
+          
+          
+          
+  /suscripcion/{id}:
+    get:
+      tags:
+      - Usuario suscrito
+      summary: Obtener estado de la suscripción de un usuario
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario para activar su suscripcion
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Estado de una suscripcion.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UsuarioSuscrito'
+    post:
+      tags:
+      - Usuario suscrito
+      summary: Activar suscripcion usuario
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario para activar su suscripcion
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                idTransaccion:
+                  type: integer
+      responses:
+        '201':
+          description: Usuario suscrito
+        '404':
+          description: Usuario no encontrado
+        '400':
+          description: Error al verificar la transaccion
+    
+    delete:
+      tags:
+      - Usuario suscrito
+      summary: Desactivar suscripcion usuario
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario para activar su suscripcion
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: La suscripcion ha sido anulada correctamente.
+        '404':
+          description: Este usuario no tiene una suscripcion.
+          
+          
+
+  /artistas:
+    get:
+      tags:
+      -  Artista
+      summary: Obtener todos los artistas
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Artista'
+    
+    post:
+      tags:
+      -  Artista
+      summary: Convertir usuario en un nuevo artista
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './usuarios.yalm#/components/schemas/Usuario'
+      responses:
+        '201':
+          description: Artista creado correctamente
+          
+  /artistas/{id}:
+    get:  
+      tags:
+      -  Artista
+      summary: Obtener un artista por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del artista que se desea obtener
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Artista encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artista'
+        '404':
+          description: Artista no encontrado
+          
+    put:
+      tags:
+      -  Artista
+      summary: Actualizar un artista por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del artista que se desea actualizar
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Artista'
+      responses:
+        '204':
+          description: artista actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artista'
+        '404':
+          description: artista no encontrado
+    delete:
+      tags:
+      -  Artista
+      summary: Borrar un artista por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del artista que se desea borrar
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Artista borrado correctamente
+        '404':
+          description: Artista no encontrado
+          
+
+
+components:
+  schemas:
+    Usuario:
+      type: object
+      properties:
+        id:
+          type: integer
+        nombre:
+          type: string
+        apellidos:
+          type: string
+        fechaNacimiento:
+          type: string
+          format: date
+        sexo:
+          type: string
+          enum: [masculino, femenino, otro]
+        metodoPagoPreferido:
+          type: string
+        direccion:
+          type: string
+        nombreUsuario:
+          type: string
+        email:
+          type: string
+          format: email
+        contrasena:
+          type: string
+        favoritos:
+          type: array
+          items:
+            type: string
+        seguimientoArtistas:
+          type: array
+          items:
+            type: string
+        recibirNotificaciones:
+          type: boolean
+          
+  
+    UsuarioSuscrito:
+      type: object
+      properties:
+        idSuscripcion:
+          type: integer
+        idUsuario:
+          type: integer
+        estado:
+          type: boolean
+        direccionFacturacion:
+          type: string
+        autoRenovable:
+          type: boolean
+        diasRestantes:
+          type: integer
+          
+          
+    Artista:
+      type: object
+      properties:
+        id:
+          type: integer
+        nombre:
+          type: string
+        apellidos:
+          type: string
+        fechaNacimiento:
+          type: string
+          format: date
+        sexo:
+          type: string
+          enum: [masculino, femenino, otro]
+        metodoPagoPreferido:
+          type: string
+        direccion:
+          type: string
+        nombreUsuario:
+          type: string
+        email:
+          type: string
+          format: email
+        contrasena:
+          type: string
+        favoritos:
+          type: array
+          items:
+            $ref: '#/components/schemas/Artista'
+        seguimientoArtistas:
+          type: array
+          items:
+            type: string
+        recibirNotificaciones:
+          type: boolean
+        nombreArtistico:
+          type: string
+        descripcion:
+          type: string
+        esTendencia:
+          type: boolean
+        verificado:
+          type: boolean
+        iban:
+          type: string
+        propietarioCuenta:
+          type: string
+        redesSociales:
+          type: array
+          items:
+            type: string
