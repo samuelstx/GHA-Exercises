@@ -25,13 +25,10 @@ jobs:
       - uses: actions/setup-python@v3
         with:
           python-version: "3.12"
-          cache: poetry
-
-
 
       # Runs a single command using the runners shell
       - name: Run a pip install
         run: pip install -r ./requirements.txt
 
       - name: Run a test
-        run: pytest test
+        run: pytest tests
